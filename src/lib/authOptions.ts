@@ -30,7 +30,10 @@ async function authorize(
     req: Pick<RequestInternal, "headers">
 ) {
     try {
-        const ip = req?.headers?.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+        const forwardedFor = req?.headers?.["x-forwarded-for"];
+        const ip = Array.isArray(forwardedFor)
+            ? forwardedFor[0]
+            : forwardedFor?.split(",")[0]?.trim();
 
         if(!canAttemptLogin(ip)) {
             console.warn(`Login bloqueado temporariamente para o IP: ${ip}`);
