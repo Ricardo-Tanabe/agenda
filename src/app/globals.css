@@ -1,26 +1,114 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fdfaf6;
+  --foreground: #1f1f1f;
+  --card: #fefbf5;
+  --paper-line: #f2efe9;
+  --form-bg: #fefbf5;
+  --input-text: #1f1f1f;
+  --input-border: #d1d1d1;
+  --button-bg: #3b82f6;
+  --button-text: #ffffff;
 }
 
-@theme inline {
+/* @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
+} */
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0f0f0f;
+    --foreground: #f3f3f3;
+    --card: #1a1a1a;
+    --paper-line: #1d1d1d;
+    --form-bg: #2a2a2a;
+    --input-text: #f3f3f3;
+    --input-border: #4b5563;
+    --button-bg: #2563eb;
+    --button-text: #ffffff;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  line-height: 1.5;
+}
+
+.agenda-bg {
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--card),
+    var(--card) 22px,
+    var(--paper-line) 23px,
+    var(--card) 24px
+    );
+}
+  
+.main-container {
+  @apply p-6 max-w-3xl mx-auto rounded-xl shadow-sm font-serif;
+  background-color: var(--card);
+  color: var(--foreground);
+}
+
+.input-base {
+  @apply w-full border px-3 py-2 rounded mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500;
+  background-color: var(--form-bg);
+  color: var(--input-text);
+  border-color: var(--input-border);
+}
+
+select.input-base {
+  background-color: var(--form-bg);
+  color: var(--input-text);
+  border-color: var(--input-border);
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  vertical-align: middle;
+}
+
+select.input-base:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(59 130 246 / 0.5);
+}
+
+.label-base {
+  @apply block text-sm font-semibold;
+}
+
+.hint-text {
+  @apply text-xs text-gray-500 dark:text-gray-400 mt-1;
+}
+
+.btn-primary {
+  @apply bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50 transition;
+}
+
+.btn-secondary {
+  @apply bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-100 px-4 py-2 rounded hover:bg-gray-400 dark:hover:bg-gray-600 transition;
+}
+
+.handwritten {
+  font-family: 'Caveat', cursive;
+}
+
+.auth-wrapper {
+  @apply w-full max-w-sm p-6 rounded-xl shadow-md border;
+  background-color: var(--card);
+  color: var(--foreground);
+}
+
+.auth-title {
+  @apply text-2xl font-bold text-center mb-4;
+  font-family: 'Caveat', cursive;
+}
+
+.auth-link {
+  @apply text-blue-600 dark:text-blue-400 hover:underline ml-1;
 }
