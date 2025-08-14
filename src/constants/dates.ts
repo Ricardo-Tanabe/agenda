@@ -1,0 +1,9 @@
+export const DAY_IN_MS = 24 * 60 * 60 * 1000; // 24h * 60min * 60s * 1000ms
+export const DATE_FORMAT_DAY = "yyyy-MM-dd";
+export const DATE_FORMAT_DISPLAY = "dd/MM/yyyy";
+export const DATE_FORMAT_MONTH = "yyyy-MM";
+export const DATE_FORMAT_MONTH_YEAR = "MMMM yyyy";
+export const DATE_FORMAT_MONTH_NAME = "MMMM";
+export const WEEKDAY_ABBREVIATIONS_PT = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"];
+export const DATE_FORMAT_LONG_PT = "dd 'de' MMMM 'de' yyyy";
+export const DATE_FORMAT_SHORT_PT = "dd/MM";
