@@ -4,6 +4,8 @@ import { startOfMonth, endOfMonth, addMonths, subMonths, eachDayOfInterval, pars
 import { ptBR } from "date-fns/locale";
 import CalendarioClient from "./components/CalendarioClient";
 
+import { DATE_FORMAT_MONTH, DATE_FORMAT_MONTH_YEAR } from "@/constants/dates";
+
 export default async function CalendarioPage({ searchParams }: { searchParams: { [key: string]: string | undefined } }) {
     const searchParamsAwait = await searchParams;
     const raw = searchParamsAwait.month;
@@ -28,9 +30,9 @@ export default async function CalendarioPage({ searchParams }: { searchParams: {
             completedDates={completedDates}
             scheduledDates={scheduledDates}
             days={days.map((d) => d.toISOString())}
-            prevMonthStr={format(prevMonth, "yyyy-MM")}
-            nextMonthStr={format(nextMonth, "yyyy-MM")}
-            titleStr={format(baseDate, "MMMM yyyy", { locale: ptBR })}
+            prevMonthStr={format(prevMonth, DATE_FORMAT_MONTH)}
+            nextMonthStr={format(nextMonth, DATE_FORMAT_MONTH)}
+            titleStr={format(baseDate, DATE_FORMAT_MONTH_YEAR, { locale: ptBR })}
         />
     );
 }

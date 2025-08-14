@@ -6,6 +6,9 @@ import { ptBR } from "date-fns/locale";
 import Link from "next/link";
 import TaskNotes from "../components/TaskNotes";
 
+import { DATE_FORMAT_DISPLAY, DATE_FORMAT_DAY } from "@/constants/dates";
+import { ROUTE_EDIT_TASK } from "@/constants/routes";
+
 interface PageProps {
     params: { id: string };
 }
@@ -15,13 +18,13 @@ export default async function ViewTaskPage({ params }: PageProps) {
     const awaitParams = await params;
     const task = await getTaskWithNoteById(awaitParams.id);
 
-    if (!task || task.userId !== userId) redirect("/agenda");
+    if (!task || task.userId !== userId) redirect(`/agenda/${format(new Date(), DATE_FORMAT_DAY)}`);
 
-    const formattedDate = format(new Date(task.scheduledFor), "dd/MM/yyyy", {
+    const formattedDate = format(new Date(task.scheduledFor), DATE_FORMAT_DISPLAY, {
         locale: ptBR,
     });
 
-    const taskDatePath = format(new Date(task.scheduledFor), "yyyy-MM-dd");
+    const taskDatePath = format(new Date(task.scheduledFor), DATE_FORMAT_DAY);
 
     return (
         <main className="agenda-bg min-h-screen py-10 px-4">
@@ -44,7 +47,7 @@ export default async function ViewTaskPage({ params }: PageProps) {
 
                 <div className="flex gap-2 flex-wrap">
                     <Link
-                        href={`/agenda/edit/${task.id}`}
+                        href={`${ROUTE_EDIT_TASK}${task.id}`}
                         className="btn-primary"
                     >
                         Editar

@@ -8,6 +8,10 @@ import { TaskCard } from "@/app/agenda/components/TaskCard";
 import { PaginationControls } from "@/app/agenda/components/PaginationControls";
 import Link from "next/link";
 
+import { DAY_IN_MS, DATE_FORMAT_DAY, DATE_FORMAT_DISPLAY, DATE_FORMAT_MONTH } from "@/constants/dates";
+import { PAGE_SIZE_OPTIONS, DEFAULT_PAGE_SIZE, DEFAULT_PAGE_NUMBER } from "@/constants/pagination";
+import { ROUTE_DASHBOARD, ROUTE_NEW_TASK, ROUTE_CALENDAR_MONTH, ROUTE_CALENDAR_YEAR } from "@/constants/routes";
+
 type PageProps = {
     params: {date: string};
     searchParams?: { query?: string, page?: string, limit?: string}
@@ -17,9 +21,9 @@ export default async function AgendaByDatePage({ params, searchParams }: PagePro
     const userId = await getUserIdOrRedirect();
 
     const awaitParams = await params; // Manter por segurança
-    if (!awaitParams?.date || typeof awaitParams.date !== "string") redirect("/agenda/dashboard");
+    if (!awaitParams?.date || typeof awaitParams.date !== "string") redirect(ROUTE_DASHBOARD);
     const date = parseISO(awaitParams.date);
-    if (!isValid(date)) redirect("/agenda/dashboard");
+    if (!isValid(date)) redirect(ROUTE_DASHBOARD);
 
     const today = startOfDay(new Date());
     const isToday = isSameDay(date, today);
@@ -37,8 +41,8 @@ export default async function AgendaByDatePage({ params, searchParams }: PagePro
     const awaitSearchParams = await searchParams; // Manter por segurança
     
     const query = awaitSearchParams?.query ?? "";
-    const page = parseInt(awaitSearchParams?.page || "1");
-    const limit = parseInt(awaitSearchParams?.limit || "10");
+    const page = parseInt(awaitSearchParams?.page || String(DEFAULT_PAGE_NUMBER));
+    const limit = parseInt(awaitSearchParams?.limit || String(DEFAULT_PAGE_SIZE));
 
     const { tasks, totalPages } = getFilteredTasks({
         tasks: allTasks,
@@ -50,7 +54,7 @@ export default async function AgendaByDatePage({ params, searchParams }: PagePro
     return (
         <main className="main-container agenda-bg">
             <h1 className="text-2xl font-bold mb-6 handwritten">
-                Tarefas do dia {format(date, "dd/MM/yyyy")}
+                Tarefas do dia {format(date, DATE_FORMAT_DISPLAY)}
             </h1>
 
             <form className="flex flex-col md:flex-row items-center gap-4 mb-6">
@@ -66,7 +70,7 @@ export default async function AgendaByDatePage({ params, searchParams }: PagePro
                     defaultValue={limit}
                     className="input-base w-full h-10 md:w-[140px]"
                 >
-                    {[10, 20, 30, 40, 50].map(n => (
+                    {PAGE_SIZE_OPTIONS.map(n => (
                         <option key={n} value={n}>{n} por página</option>
                     ))}
                 </select>
@@ -74,17 +78,17 @@ export default async function AgendaByDatePage({ params, searchParams }: PagePro
             </form>
 
             <div className="flex gap-4 mb-6">
-                <Link href={"/agenda/new"} className="btn-primary">
+                <Link href={ROUTE_NEW_TASK} className="btn-primary">
                     Nova Tarefa
                 </Link>
                 <Link
-                    href={`/agenda/${format(new Date(date.getTime() - 86400000), "yyyy-MM-dd")}`}
+                    href={`/agenda/${format(new Date(date.getTime() - DAY_IN_MS), DATE_FORMAT_DAY)}`}
                     className="btn-secondary"
                 >
                     Dia Anterior
                 </Link>
                 <Link
-                    href={`/agenda/${format(new Date(date.getTime() + 86400000), "yyyy-MM-dd")}`}
+                    href={`/agenda/${format(new Date(date.getTime() + DAY_IN_MS), DATE_FORMAT_DAY)}`}
                     className="btn-secondary"
                 >
                     Próximo Dia
@@ -95,14 +99,14 @@ export default async function AgendaByDatePage({ params, searchParams }: PagePro
                 <p>
                     Visualize o mês atual no{" "}
                     <Link
-                        href={`/agenda/calendario?month=${format(date, "yyyy-MM")}`}
+                        href={`${ROUTE_CALENDAR_MONTH}?month=${format(date, DATE_FORMAT_MONTH)}`}
                         className="text-blue-600 dark:text-blue-400 underline"
                     >
                         📅 Calendário mensal
                     </Link>{" "}
                     ou acesse o{" "}
                     <Link
-                        href={`/agenda/calendario/anual?year=${date.getFullYear()}`}
+                        href={`${ROUTE_CALENDAR_YEAR}?year=${date.getFullYear()}`}
                         className="text-blue-600 dark:text-blue-400 underline"
                     >
                         🗓️ Calendário anual

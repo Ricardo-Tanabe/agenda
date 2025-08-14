@@ -7,6 +7,12 @@ import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { isToday, parseISO, format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
+import {
+    DATE_FORMAT_MONTH_NAME,
+    WEEKDAY_ABBREVIATIONS_PT,
+    DATE_FORMAT_LONG_PT } from "@/constants/dates";
+import { ROUTE_CALENDAR_MONTH, ROUTE_CALENDAR_YEAR } from "@/constants/routes";
+
 interface Props {
     baseDate: string;
     completedDates: string[];
@@ -28,7 +34,7 @@ export default function CalendarioClient({ baseDate, completedDates, scheduledDa
 
     function handleMonthYearChange(month: number, year: string) {
         const formatted = `${year}-${month.toString().padStart(2, "0")}`;
-        router.push(`/agenda/calendario?month=${formatted}`);
+        router.push(`${ROUTE_CALENDAR_MONTH}?month=${formatted}`);
     }
 
     useEffect(() => {
@@ -40,7 +46,7 @@ export default function CalendarioClient({ baseDate, completedDates, scheduledDa
     return (
         <section className="main-container">
             <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-                <Link href={`/agenda/calendario?month=${prevMonthStr}`} className="text-blue-500 hover:underline">
+                <Link href={`${ROUTE_CALENDAR_MONTH}?month=${prevMonthStr}`} className="text-blue-500 hover:underline">
                     ← Mês anterior
                 </Link>
 
@@ -62,7 +68,7 @@ export default function CalendarioClient({ baseDate, completedDates, scheduledDa
                     >
                         {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
                             <option key={m} value={m}>
-                                {format(new Date(2000, m - 1, 1), "MMMM", { locale: ptBR }).replace(/^./, (c) => c.toUpperCase())}
+                                {format(new Date(2000, m - 1, 1), DATE_FORMAT_MONTH_NAME, { locale: ptBR }).replace(/^./, (c) => c.toUpperCase())}
                             </option>
                         ))}
                     </select>
@@ -81,13 +87,13 @@ export default function CalendarioClient({ baseDate, completedDates, scheduledDa
                         className="input-base h-10 w-20"
                      />
                 </div>
-                <Link href={`/agenda/calendario?month=${nextMonthStr}`} className="text-blue-500 hover:underline">
+                <Link href={`${ROUTE_CALENDAR_MONTH}?month=${nextMonthStr}`} className="text-blue-500 hover:underline">
                     Próximo mês →
                 </Link>
             </div>
 
             <div className="grid grid-cols-7 text-sm text-center font-semibold mb-2">
-                {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"].map((d) => (
+                {WEEKDAY_ABBREVIATIONS_PT.map((d) => (
                     <div key={d}>{d}</div>
                 ))}
             </div>
@@ -147,7 +153,7 @@ export default function CalendarioClient({ baseDate, completedDates, scheduledDa
                 <div className="fixed inset-0 flex items-center justify-center p-4">
                     <DialogPanel className="bg-white dark:bg-gray-900 p-6 rounded-lg max-w-md w-full">
                         <DialogTitle className="text-lg font-semibold mb-2">
-                            Tarefas de {selectedDate ? format(parseISO(selectedDate), "dd 'de' MMMM 'de' yyyy", { locale: ptBR }) : ""}
+                            Tarefas de {selectedDate ? format(parseISO(selectedDate), DATE_FORMAT_LONG_PT, { locale: ptBR }) : ""}
                         </DialogTitle>
                         {dayTasks.length > 0 ? (
                             <ul className="list-disc pl-5 text-sm text-gray-800 dark:text-gray-200 mb-4">
@@ -187,7 +193,7 @@ export default function CalendarioClient({ baseDate, completedDates, scheduledDa
             <div className="mt-6 text-sm text-gray-700 dark:text-gray-300">
                 <p>📅 Dias com tarefas: {completedDates.length}</p>
                 <Link
-                    href={`/agenda/calendario/anual?year=${selectedYear}`}
+                    href={`${ROUTE_CALENDAR_YEAR}?year=${selectedYear}`}
                     className="text-sm text-blue-600 hover:underline mt-2 inline-block"
                 >
                     📆 Calendário anual

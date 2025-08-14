@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { PAGE_SIZE_OPTIONS } from "@/constants/pagination";
+
 type PageProps = {
     values: {
         query: string,
@@ -99,7 +101,7 @@ export function FilterForm({ values }: PageProps) {
                         defaultValue={limit}
                         className="input-base h-10"
                     >
-                        {[10, 20, 30, 40, 50].map((n) => (
+                        {PAGE_SIZE_OPTIONS.map((n) => (
                             <option key={n} value={n}>
                                 {n} por página
                             </option>

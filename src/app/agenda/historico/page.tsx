@@ -7,6 +7,10 @@ import { FilterForm } from "./components/FilterForm";
 import Link from "next/link";
 import { format } from "date-fns";
 
+import { DATE_FORMAT_MONTH } from "@/constants/dates";
+import { DEFAULT_PAGE_SIZE, DEFAULT_PAGE_NUMBER } from "@/constants/pagination";
+import { ROUTE_CALENDAR_MONTH, ROUTE_CALENDAR_YEAR } from "@/constants/routes";
+
 type PageProps = {
     searchParams?: {
         query?: string,
@@ -25,8 +29,8 @@ export default async function AgendaPage({ searchParams }: PageProps) {
 
     const sParams = await searchParams
     const query = sParams?.query ?? "";
-    const page = parseInt(sParams?.page || "1");
-    const limit = parseInt(sParams?.limit || "10");
+    const page = parseInt(sParams?.page || String(DEFAULT_PAGE_NUMBER));
+    const limit = parseInt(sParams?.limit || String(DEFAULT_PAGE_SIZE));
     const completedFrom = sParams?.completedFrom ?? "";
     const completedTo = sParams?.completedTo ?? "";
     const priority = sParams?.priority ?? "";
@@ -51,14 +55,14 @@ export default async function AgendaPage({ searchParams }: PageProps) {
                 <p>
                     Visualize o mês atual no{" "}
                     <Link
-                        href={`/agenda/calendario?month=${format(new Date(), "yyyy-MM")}`}
+                        href={`${ROUTE_CALENDAR_MONTH}?month=${format(new Date(), DATE_FORMAT_MONTH)}`}
                         className="text-blue-600 dark:text-blue-400 underline"
                     >
                         📅 Calendário mensal
                     </Link>{" "}
                     ou acesse o{" "}
                     <Link
-                        href={`/agenda/calendario/anual?year=${new Date().getFullYear()}`}
+                        href={`${ROUTE_CALENDAR_YEAR}?year=${new Date().getFullYear()}`}
                         className="text-blue-600 dark:text-blue-400 underline"
                     >
                         🗓️ Calendário anual

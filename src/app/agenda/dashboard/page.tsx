@@ -2,6 +2,8 @@ import { getUserIdOrRedirect } from "@/lib/auth/getUserIdOrRedirect";
 import { getTasksByUserId } from "@/lib/data/getTasks";
 import Link from "next/link";
 
+import { ROUTE_NEW_TASK, ROUTE_CALENDAR_YEAR } from "@/constants/routes";
+
 export default async function DashboardPage() {
     const userId = await getUserIdOrRedirect();
     const tasks = await getTasksByUserId(userId);
@@ -19,7 +21,7 @@ export default async function DashboardPage() {
                 <h1 className="text-2xl font-bold">Dashboard</h1>
 
                 <Link
-                    href={"/agenda/new"}
+                    href={ROUTE_NEW_TASK}
                     className="inline-block bg-blue-600 hover:bg-blue-700
                     text-white font-semibold px-4 py-2 rounded transition"
                 >
@@ -65,7 +67,7 @@ export default async function DashboardPage() {
                 <p className="mt-2">
                     Ou veja o panorama anual em {" "}
                     <Link
-                        href={`/agenda/calendario/anual?year=${new Date().getFullYear()}`}
+                        href={`${ROUTE_CALENDAR_YEAR}?year=${new Date().getFullYear()}`}
                         className="text-blue-600 dark:text-blue-400 underline"
                     >
                         📆 Calendário anual

@@ -4,6 +4,9 @@ import { format, eachDayOfInterval, startOfMonth, endOfMonth } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import Link from "next/link";
 
+import { DATE_FORMAT_MONTH_NAME, DATE_FORMAT_DISPLAY } from "@/constants/dates";
+import { ROUTE_CALENDAR_MONTH } from "@/constants/routes";
+
 export default async function VisaoAnualPage({ searchParams }: { searchParams: { [key: string]: string | undefined } }) {
     const searchParamsAwait = await searchParams;
   
@@ -33,7 +36,7 @@ export default async function VisaoAnualPage({ searchParams }: { searchParams: {
         <section className="main-container">
             <div className="flex justify-between items-center mb-4">
                 <h1 className="text-xl font-bold">Visão Anual - {year}</h1>
-                <Link href="/agenda/calendario" className="text-sm text-blue-600 hover:underline">
+                <Link href={ROUTE_CALENDAR_MONTH} className="text-sm text-blue-600 hover:underline">
                     ← Calendário mensal
                 </Link>
             </div>
@@ -44,41 +47,41 @@ export default async function VisaoAnualPage({ searchParams }: { searchParams: {
 
                 return (
                     <div key={monthIndex} className="border rounded p-4 shadow-sm">
-                    <h2 className="text-md font-semibold mb-2">
-                        {format(new Date(year, monthIndex), "MMMM", { locale: ptBR })}
-                    </h2>
-                    <div className="grid grid-cols-7 gap-1 text-sm">
-                        {days.map((day) => {
-                            const dateStr = day.toISOString().split("T")[0];
-                            const isCompleted = completedSet.has(dateStr);
-                            const isScheduled = scheduledSet.has(dateStr);
-                            const todayStr = new Date().toISOString().split("T")[0];
-                            const isToday = dateStr === todayStr;
-                            const isFuture = day > new Date();
+                        <h2 className="text-md font-semibold mb-2">
+                            {format(new Date(year, monthIndex), DATE_FORMAT_MONTH_NAME, { locale: ptBR })}
+                        </h2>
+                        <div className="grid grid-cols-7 gap-1 text-sm">
+                            {days.map((day) => {
+                                const dateStr = day.toISOString().split("T")[0];
+                                const isCompleted = completedSet.has(dateStr);
+                                const isScheduled = scheduledSet.has(dateStr);
+                                const todayStr = new Date().toISOString().split("T")[0];
+                                const isToday = dateStr === todayStr;
+                                const isFuture = day > new Date();
 
-                            let bgColor = "bg-transparent";
-                            if (isCompleted) bgColor = "bg-green-200 dark:bg-green-800";
-                            else if (isScheduled) bgColor = isFuture ? "bg-yellow-200 dark:bg-yellow-800" : "bg-orange-200 dark:bg-orange-700"
-                            else if (isToday) bgColor = "bg-blue-200 dark:bg-blue-800";
+                                let bgColor = "bg-transparent";
+                                if (isCompleted) bgColor = "bg-green-200 dark:bg-green-800";
+                                else if (isScheduled) bgColor = isFuture ? "bg-yellow-200 dark:bg-yellow-800" : "bg-orange-200 dark:bg-orange-700"
+                                else if (isToday) bgColor = "bg-blue-200 dark:bg-blue-800";
 
-                            return (
-                                <Link
-                                    key={dateStr}
-                                    href={`/agenda/${dateStr}`}
-                                    className={`block p-1 text-center rounded ${bgColor} hover:bg-blue-100 dark:hover:bg-blue-900`}
-                                    title={`${format(day, "dd/MM/yyyy", { locale: ptBR })}${
-                                        isCompleted
-                                            ? " - Tarefas concluídas"
-                                            : isScheduled
-                                            ? " - Tarefas agendadas"
-                                            :""
-                                    }`}
-                                >
-                                    {day.getDate()}
-                                </Link>
-                            );
-                        })}
-                    </div>
+                                return (
+                                    <Link
+                                        key={dateStr}
+                                        href={`/agenda/${dateStr}`}
+                                        className={`block p-1 text-center rounded ${bgColor} hover:bg-blue-100 dark:hover:bg-blue-900`}
+                                        title={`${format(day, DATE_FORMAT_DISPLAY, { locale: ptBR })}${
+                                            isCompleted
+                                                ? " - Tarefas concluídas"
+                                                : isScheduled
+                                                ? " - Tarefas agendadas"
+                                                :""
+                                        }`}
+                                    >
+                                        {day.getDate()}
+                                    </Link>
+                                );
+                            })}
+                        </div>
                     </div>
                 );
                 })}
